@@ -161,14 +161,14 @@ export default function Page() {
               onChange={handlePreferredTime}
             />
           </div>
-          <div className="flex justify-end mt-4">
-            <button
-              type="submit"
-              className="bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-900 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50"
-            >
-              Submit
-            </button>
-          </div>
+        </div>
+        <div className="flex justify-end mt-4">
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-900 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50"
+          >
+            Submit
+          </button>
         </div>
       </form>
     </div>
