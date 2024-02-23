@@ -1,3 +1,6 @@
+import { Table } from "../../components/Timetable";
+import "../create/create.css";
+
 async function getData(meetingId: string) {
   const res = await fetch(`http://localhost:5000/${meetingId}/meetingInfo`);
 
@@ -10,6 +13,27 @@ async function getData(meetingId: string) {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const data = await getData(params.id);
+
+  // TODO Complete the function below
+  // NOTE (This is your homework)
+  const convertor = (preferredTime: string) => {
+    // "0,1,2,3,4,5,6,30,31,32,33"
+    let strArray = preferredTime.split(",");
+    let numArray = strArray.map(Number);
+    // 6 rows, 7 columns
+    let booleanArray: boolean[][] = [
+      [false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false],
+    ];
+    for (let i = 0; i < numArray.length; i++) {
+      const element = numArray[i];
+    }
+    return booleanArray;
+  };
 
   return (
     <div className="container mx-auto px-4">
@@ -31,9 +55,10 @@ export default async function Page({ params }: { params: { id: string } }) {
           <p className="text-lg font-semibold">Host Name:</p>
           <p className="text-sm">{data.host.name}</p>
         </div>
-        <div className="bg-gray-100 p-2">
+        <div className="bg-gray-100 p-2 col-span-2 mb-8">
           <p className="text-lg font-semibold">Preferred Time:</p>
-          <p className="text-sm">{data.host.preferred_time}</p>
+          <p className="text-sm">{convertor(data.host.preferred_time)}</p>
+          <Table value={convertor(data.host.preferred_time)} />
         </div>
       </div>
     </div>

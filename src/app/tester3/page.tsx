@@ -6,15 +6,18 @@ import "./index.css";
 
 export default function Page() {
   const convertor = (value: boolean[][]) => {
+    let str = "";
     for (let i = 0; i < value.length; i++) {
       for (let j = 0; j < value[i].length; j++) {
         const element = value[i][j];
         if (element == true) {
           const num = 6 * j + i;
-          console.log(num);
+          str = str + num + ",";
         }
       }
     }
+    str = str.slice(0, -1);
+    console.log(str);
   };
 
   const [ref, value] = useTableDragSelect([
@@ -30,10 +33,6 @@ export default function Page() {
 
   return (
     <div>
-      <h1>
-        <a href="https://github.com/jeonbyeongmin/use-table-drag-select">useTableDragSelect </a>
-      </h1>
-
       <Table ref={ref} value={value} />
     </div>
   );

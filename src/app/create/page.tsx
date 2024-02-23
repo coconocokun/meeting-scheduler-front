@@ -1,17 +1,47 @@
 "use client";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useTableDragSelect } from "use-table-drag-select";
+import { Table } from "../../components/Timetable";
+import "./create.css";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [timezone, setTimezone] = useState("");
   const [duration, setDuration] = useState("");
-  const [preferredtime, setPreferredtime] = useState("");
+
+  const [ref, tableValue] = useTableDragSelect([
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+  ]);
+
+  const convertor = (value: boolean[][]) => {
+    let str = "";
+    for (let i = 0; i < value.length; i++) {
+      for (let j = 0; j < value[i].length; j++) {
+        const element = value[i][j];
+        if (element == true) {
+          const num = 6 * j + i;
+          str = str + num + ",";
+        }
+      }
+    }
+    str = str.slice(0, -1);
+    return str;
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const preferredtime = convertor(tableValue);
     const dataToSend = {
       title: title,
       description: desc,
@@ -21,6 +51,7 @@ export default function Page() {
       hostPassword: password,
       hostPreferredTime: preferredtime,
     };
+    console.log(dataToSend);
     const res = await fetch("http://localhost:5000/createMeeting", {
       method: "POST",
       headers: {
@@ -30,6 +61,7 @@ export default function Page() {
       body: JSON.stringify(dataToSend),
     });
     const resJson = await res.json();
+    router.push(`/${resJson.meetingId}`);
   };
 
   const handleNameChange = (e: any) => {
@@ -56,14 +88,10 @@ export default function Page() {
     setDuration(e.target.value);
   };
 
-  const handlePreferredTime = (e: any) => {
-    setPreferredtime(e.target.value);
-  };
-
   return (
     <div className="container mx-auto px-4">
       <h1 className="font-bold text-4xl text-center mt-8 mb-4">Create Page</h1>
-      <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-gray-100 p-8 rounded-lg shadow-lg">
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-gray-100 p-8 rounded-lg shadow-lg">
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
             <label htmlFor="username" className="block text-sm font-medium text-gray-600">
@@ -151,15 +179,7 @@ export default function Page() {
             <label htmlFor="preferredtime" className="block text-sm font-medium text-gray-600">
               Preferred time
             </label>
-            <input
-              type="text"
-              name="preferredtime"
-              id="preferredtime"
-              placeholder="ex) 1,2,3,4,5"
-              className="block w-full mt-1 border border-gray-300 rounded-md py-1 px-2 shadow-sm"
-              value={preferredtime}
-              onChange={handlePreferredTime}
-            />
+            <Table ref={ref} value={tableValue} />
           </div>
         </div>
         <div className="flex justify-end mt-4">
