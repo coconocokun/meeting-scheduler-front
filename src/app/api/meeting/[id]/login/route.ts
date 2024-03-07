@@ -26,7 +26,7 @@ export async function POST(request: NextRequest, context: { params: any }) {
     };
     cookies().set("session", JSON.stringify(sessionData), {
       maxAge: 60 * 60, // 1 hour
-      secure: true,
+      secure: false,
       path: "/",
     });
     return NextResponse.json({ stats: "Logged in" }, { status: 200 });
