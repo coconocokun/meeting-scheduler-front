@@ -14,5 +14,5 @@ export async function POST(request: Request) {
     data.hostPassword,
     data.preferredTime
   );
-  return NextResponse.json(res, { status: 200 });
+  return NextResponse.json({ meetingId: res }, { status: 200 });
 }

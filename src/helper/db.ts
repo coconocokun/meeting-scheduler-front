@@ -25,11 +25,15 @@ export async function getMeetingInfo(db: ServerlessMysql, id: number) {
   const hrows = await db.query("SELECT name, preferred_time FROM host WHERE meeting_id = ?", [id]);
   const host = (hrows as any)[0];
 
+  // 3. Get guest info from guest table
+  const grows = await db.query("SELECT name, preferred_time FROM guest WHERE meeting_id = ?", [id]);
+
   return {
     ...meeting,
     host: {
       ...host,
     },
+    guest: grows,
   };
 }
 
