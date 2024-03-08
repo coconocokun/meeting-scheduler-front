@@ -52,7 +52,7 @@ export default function Page() {
       hostPreferredTime: preferredtime,
     };
     console.log(dataToSend);
-    const res = await fetch("http://localhost:5000/createMeeting", {
+    const res = await fetch("/api/meeting/create", {
       method: "POST",
       headers: {
         accept: "*/*",
@@ -91,10 +91,16 @@ export default function Page() {
   return (
     <div className="container mx-auto px-4">
       <h1 className="font-bold text-4xl text-center mt-8 mb-4">Create Page</h1>
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-gray-100 p-8 rounded-lg shadow-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-3xl mx-auto bg-gray-100 p-8 rounded-lg shadow-lg"
+      >
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-600"
+            >
               Host name
             </label>
             <input
@@ -108,7 +114,10 @@ export default function Page() {
             />
           </div>
           <div className="col-span-2">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-600"
+            >
               Host password
             </label>
             <input
@@ -121,7 +130,10 @@ export default function Page() {
             />
           </div>
           <div className="col-span-2">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-600"
+            >
               Meeting title
             </label>
             <input
@@ -135,7 +147,10 @@ export default function Page() {
             />
           </div>
           <div className="col-span-2">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-600"
+            >
               Meeting description
             </label>
             <textarea
@@ -148,7 +163,10 @@ export default function Page() {
             />
           </div>
           <div className="col-span-1">
-            <label htmlFor="timezone" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="timezone"
+              className="block text-sm font-medium text-gray-600"
+            >
               Timezone
             </label>
             <input
@@ -162,7 +180,10 @@ export default function Page() {
             />
           </div>
           <div className="col-span-1">
-            <label htmlFor="duration" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="duration"
+              className="block text-sm font-medium text-gray-600"
+            >
               Meeting duration
             </label>
             <input
@@ -176,7 +197,10 @@ export default function Page() {
             />
           </div>
           <div className="col-span-2">
-            <label htmlFor="preferredtime" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="preferredtime"
+              className="block text-sm font-medium text-gray-600"
+            >
               Preferred time
             </label>
             <Table ref={ref} value={tableValue} />

@@ -2,7 +2,10 @@ import { Table } from "../../components/Timetable";
 import "../create/create.css";
 
 async function getData(meetingId: string) {
-  const res = await fetch(`http://localhost:5000/${meetingId}/meetingInfo`);
+  // FIXME URL
+  const res = await fetch(`http://localhost:3000/api/meeting/${meetingId}`, {
+    method: "GET",
+  });
 
   if (!res.ok) {
     throw new Error("Failed...");
@@ -14,8 +17,6 @@ async function getData(meetingId: string) {
 export default async function Page({ params }: { params: { id: string } }) {
   const data = await getData(params.id);
 
-  // TODO Complete the function below
-  // NOTE (This is your homework)
   const convertor = (preferredTime: string) => {
     // "0,1,2,3,32,33"
     let strArray = preferredTime.split(",");
@@ -43,7 +44,9 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="font-bold text-4xl text-center mt-8 mb-4">Meeting Information</h1>
+      <h1 className="font-bold text-4xl text-center mt-8 mb-4">
+        Meeting Information
+      </h1>
       <div className="grid grid-cols-2 gap-2">
         <div className="bg-gray-100 p-2">
           <p className="text-lg font-semibold">Title:</p>
