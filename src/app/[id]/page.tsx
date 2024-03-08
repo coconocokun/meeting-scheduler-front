@@ -3,7 +3,7 @@ import "../create/create.css";
 
 async function getData(meetingId: string) {
   // FIXME URL
-  const res = await fetch(`http://localhost:3000/api/meeting/${meetingId}`, {
+  const res = await fetch(`${process.env.MY_URL}/${meetingId}`, {
     method: "GET",
   });
 
