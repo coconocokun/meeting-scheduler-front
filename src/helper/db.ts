@@ -1,50 +1,45 @@
-import mysql, { ServerlessMysql } from "serverless-mysql";
+import { createClient, Client } from "@libsql/client";
 
 export async function connectDB() {
   try {
-    const db = mysql({
-      config: {
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USERNAME,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
-        ssl: {
-          rejectUnauthorized: true,
-        },
-      },
+    const client = await createClient({
+      url: process.env.DB_URL || "",
+      authToken: process.env.DB_TOKEN,
     });
-    await db.connect();
-    return db;
+    return client;
   } catch (err) {
     throw Error("Failed to connect DB");
   }
 }
 
-export async function getMeetingInfo(db: ServerlessMysql, id: number) {
+export async function getMeetingInfo(db: Client, id: number) {
   try {
     // 1. Get meeting info from meeting table
-    const rows = await db.query("SELECT * FROM meeting WHERE id = ?", [id]);
-    const meeting = (rows as any)[0];
+    const mrs = await db.execute({
+      sql: "SELECT * FROM meeting WHERE id = ?",
+      args: [id],
+    });
+    const meeting = mrs.rows[0];
 
     // 2. Get host info from host table
-    const hrows = await db.query(
-      "SELECT name, preferred_time FROM host WHERE meeting_id = ?",
-      [id]
-    );
-    const host = (hrows as any)[0];
+    const hrs = await db.execute({
+      sql: "SELECT name, preferred_time FROM host WHERE meeting_id = ?",
+      args: [id],
+    });
+    const host = hrs.rows[0];
 
     // 3. Get guest info from guest table
-    const grows = await db.query(
-      "SELECT name, preferred_time FROM guest WHERE meeting_id = ?",
-      [id]
-    );
+    const { rows } = await db.execute({
+      sql: "SELECT name, preferred_time FROM guest WHERE meeting_id = ?",
+      args: [id],
+    });
 
     return {
       ...meeting,
       host: {
         ...host,
       },
-      guest: grows,
+      guest: rows,
     };
   } catch (err) {
     throw Error(`Cannot get the meeting id ${id.toString()}`);
@@ -64,7 +59,7 @@ export async function getMeetingInfo(db: ServerlessMysql, id: number) {
  * @returns meetingId number
  */
 export async function createMeeting(
-  db: ServerlessMysql,
+  db: Client,
   title: string,
   description: string,
   timezone: string,
@@ -75,17 +70,17 @@ export async function createMeeting(
 ) {
   try {
     // 1. Insert meeting
-    const rows = await db.query(
-      "INSERT INTO meeting (title, description, timezone, meeting_length) VALUES (?, ?, ?, ?)",
-      [title, description, timezone, meetingLength]
-    );
-    const meetingId = (rows as any).insertId;
+    const rs = await db.execute({
+      sql: "INSERT INTO meeting (title, description, timezone, meeting_length) VALUES (?, ?, ?, ?)",
+      args: [title, description, timezone, meetingLength],
+    });
+    const meetingId = Number(rs.lastInsertRowid);
 
     // 2. Insert host
-    const hrows = await db.query(
-      "INSERT INTO host (name, password, meeting_id, preferred_time) VALUES (?, ?, ?, ?)",
-      [hostName, hostPassword, meetingId, preferredTime]
-    );
+    await db.execute({
+      sql: "INSERT INTO host (name, password, meeting_id, preferred_time) VALUES (?, ?, ?, ?)",
+      args: [hostName, hostPassword, meetingId, preferredTime],
+    });
 
     return meetingId;
   } catch (err) {
@@ -94,7 +89,7 @@ export async function createMeeting(
 }
 
 export async function changeMeeting(
-  db: ServerlessMysql,
+  db: Client,
   meetingId: number,
   title: string,
   description: string,
@@ -104,16 +99,16 @@ export async function changeMeeting(
   preferredTime: string
 ) {
   try {
-    const morws = await db.query(
-      "UPDATE meeting SET title = ?, description = ?, timezone = ?, meeting_length = ? WHERE id = ?",
-      [title, description, timezone, meetingLength, meetingId]
-    );
+    await db.execute({
+      sql: "UPDATE meeting SET title = ?, description = ?, timezone = ?, meeting_length = ? WHERE id = ?",
+      args: [title, description, timezone, meetingLength, meetingId],
+    });
 
     // host --> id, name, password, preferred_time, meeting_id
-    const hrows = await db.query(
-      "UPDATE host SET name = ?, preferred_time = ? WHERE meeting_id = ?",
-      [hostName, preferredTime, meetingId]
-    );
+    await db.execute({
+      sql: "UPDATE host SET name = ?, preferred_time = ? WHERE meeting_id = ?",
+      args: [hostName, preferredTime, meetingId],
+    });
 
     return;
   } catch (err) {
@@ -122,17 +117,17 @@ export async function changeMeeting(
 }
 
 export async function createPreferredTime(
-  db: ServerlessMysql,
+  db: Client,
   meetingId: number,
   name: string,
   preferredTime: string
 ) {
   try {
     // 1. Insert guest data into guest table
-    const rows = await db.query(
-      "INSERT INTO guest (name, meeting_id, preferred_time) VALUES (?, ?, ?)",
-      [name, meetingId, preferredTime]
-    );
+    await db.execute({
+      sql: "INSERT INTO guest (name, meeting_id, preferred_time) VALUES (?, ?, ?)",
+      args: [name, meetingId, preferredTime],
+    });
     return;
   } catch (err) {
     throw Error("Failed to insert a new guest info");
@@ -140,18 +135,18 @@ export async function createPreferredTime(
 }
 
 export async function checkLogin(
-  db: ServerlessMysql,
+  db: Client,
   meetingId: number,
   user: string,
   password: string
 ) {
   try {
-    const rows = await db.query(
-      "SELECT * FROM host WHERE name = ? AND password = ? AND meeting_id = ?",
-      [user, password, meetingId]
-    );
+    const { rows } = await db.execute({
+      sql: "SELECT * FROM host WHERE name = ? AND password = ? AND meeting_id = ?",
+      args: [user, password, meetingId],
+    });
 
-    if ((rows as any).length > 0) {
+    if (rows.length > 0) {
       return true;
     } else {
       return false;
