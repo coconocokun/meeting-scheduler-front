@@ -2,7 +2,9 @@ import { createClient, Client } from "@libsql/client";
 
 export async function connectDB() {
   try {
-    const client = await createClient({
+    console.log("Connecting...");
+
+    const client = createClient({
       url: process.env.DB_URL || "",
       authToken: process.env.DB_TOKEN,
     });
@@ -116,12 +118,7 @@ export async function changeMeeting(
   }
 }
 
-export async function createPreferredTime(
-  db: Client,
-  meetingId: number,
-  name: string,
-  preferredTime: string
-) {
+export async function createPreferredTime(db: Client, meetingId: number, name: string, preferredTime: string) {
   try {
     // 1. Insert guest data into guest table
     await db.execute({
@@ -134,12 +131,7 @@ export async function createPreferredTime(
   }
 }
 
-export async function checkLogin(
-  db: Client,
-  meetingId: number,
-  user: string,
-  password: string
-) {
+export async function checkLogin(db: Client, meetingId: number, user: string, password: string) {
   try {
     const { rows } = await db.execute({
       sql: "SELECT * FROM host WHERE name = ? AND password = ? AND meeting_id = ?",
