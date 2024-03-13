@@ -3,7 +3,7 @@ import "../create/create.css";
 
 async function getData(meetingId: string) {
   // FIXME URL
-  const res = await fetch(`${process.env.MY_URL}/${meetingId}`, {
+  const res = await fetch(`${process.env.MY_URL}/api/meeting/${meetingId}`, {
     method: "GET",
   });
 
@@ -86,9 +86,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="font-bold text-4xl text-center mt-8 mb-4">
-        Meeting Information
-      </h1>
+      <h1 className="font-bold text-4xl text-center mt-8 mb-4">Meeting Information</h1>
       <div className="grid grid-cols-2 gap-2">
         <div className="bg-gray-100 p-2">
           <p className="text-lg font-semibold">Title:</p>
