@@ -1,0 +1,99 @@
+.timetable {
+  border-spacing: 6px;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1.6em;
+  border-radius: 0.4em;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+.timetable tbody tr td {
+  background-color: #131313;
+  background-color: #f3f3f3;
+  margin: 0.2em;
+  position: relative;
+  border: 1px solid white;
+}
+
+.timetable tbody tr td:hover {
+  filter: brightness(1.5);
+  box-shadow: inset 0 0 0.5rem #00000030;
+}
+
+.timetable th {
+  cursor: default;
+}
+
+.timetable th,
+.timetable td {
+  padding: 0 1.6rem;
+  height: 1.2rem;
+  text-align: left;
+  min-width: 30px;
+}
+
+.timetable tbody th {
+  text-align: right;
+  position: relative;
+  top: -0.5em;
+  font-size: 0.8em;
+  font-family: 'Courier New', Courier, monospace;
+  padding-right: 1rem;
+  line-height: 1;
+}
+
+.timetable .selected {
+  background-color: #646cff;
+  color: #ffffff;
+}
+
+.view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  align-items: center;
+  margin-bottom: 1.6em;
+  border-radius: 0.4em;
+}
+
+.view td {
+  min-width: 4em;
+}
+
+.description {
+  font-size: 1em;
+  line-height: 1.5;
+  margin-bottom: 40px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
+
+  .timetable tbody tr td {
+    background-color: #f3f3f3;
+  }
+
+  .selected {
+    background-color: #646cff;
+  }
+
+  pre {
+    background-color: #f3f3f3;
+    color: #213547;
+  }
+}

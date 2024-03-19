@@ -1,10 +1,11 @@
-import { connectDB, createMeeting, getMeetingInfo } from "@/helper/db";
+import { connectDB, createMeeting } from "@/helper/db";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
     const db = await connectDB();
     const data = await request.json();
+    console.log(data);
     const res = await createMeeting(
       db,
       data.title,

@@ -1,10 +1,11 @@
 "use client";
+import Timetable from "@/helper/timetable";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import timezones from "timezones.json";
 import { useTableDragSelect } from "use-table-drag-select";
 import { Table } from "../../components/Timetable";
-import "./create.css";
+import "../timetable.css";
 
 
 const durations = (() => {
@@ -22,88 +23,63 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [timezone, setTimezone] = useState("");
-  const [duration, setDuration] = useState("");
+  const [timezone, setTimezone] = useState("Korea Standard Time");
+  const [duration, setDuration] = useState(durations[0].toFixed());
 
-  const [ref, tableValue] = useTableDragSelect([
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-  ]);
-
-  const convertor = (value: boolean[][]) => {
-    let str = "";
-    for (let i = 0; i < value.length; i++) {
-      for (let j = 0; j < value[i].length; j++) {
-        const element = value[i][j];
-        if (element == true) {
-          const num = 48 * j + i;
-          str = str + num + ",";
-        }
-      }
-    }
-    str = str.slice(0, -1);
-    return str;
-  };
+  const [ref, tableValue] = useTableDragSelect(Timetable.createTable());
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const preferredtime = convertor(tableValue);
+
+    if (/^([a-zA-Z0-9 ])$/.test(username)) {
+      alert("Host name not acceptable. Use alphabets and numbers only.");
+      return;
+    }
+    const usernameLength = username.trim().length;
+    if (usernameLength < 2) {
+      alert("Host name is too short");
+      return;
+    }
+    if (usernameLength > 200) {
+      alert("Host name is too long");
+      return;
+    }
+    if (!/^\d{4,4}$/.test(password)) {
+      console.log(password)
+      alert("Acceptable password is only four digit numbers");
+      return;
+    }
+
+    if (/^([a-zA-Z0-9 ])$/.test(title)) {
+      alert("Meeting title not acceptable. Use alphabets and numbers only.");
+      return;
+    }
+    const titleLength = title.trim().length;
+    if (titleLength < 3) {
+      alert("Title is too short");
+      return;
+    }
+    if (titleLength > 200) {
+      alert("Title is too long");
+      return;
+    }
+
+    const preferredTime = Timetable.toString(tableValue);
+    if (preferredTime.length === 0) {
+      alert("Please select preffered time");
+      return;
+    }
+
     const dataToSend = {
       title: title,
       description: desc,
       timezone: timezone,
-      meetingLength: duration,
+      meetingLength: parseInt(duration),
       hostName: username,
       hostPassword: password,
-      hostPreferredTime: preferredtime,
+      preferredTime,
     };
-    console.log(dataToSend);
+
     const res = await fetch("/api/meeting/create", {
       method: "POST",
       headers: {
@@ -147,6 +123,7 @@ export default function Page() {
         <form
           onSubmit={handleSubmit}
           className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md border-gray-200"
+          autoComplete="off"
         >
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -157,11 +134,13 @@ export default function Page() {
                 Host name
               </label>
               <input
+                required
                 type="text"
                 name="username"
                 id="username"
                 placeholder="ex) gavin"
-                className="block w-full mt-1 border border-gray-300 rounded-md py-1 px-2 shadow-sm "
+                className="block w-full mt-1 border border-gray-300 rounded-md py-1 px-2 shadow-sm"
+                autoComplete="off"
                 value={username}
                 onChange={handleNameChange}
               />
@@ -171,15 +150,17 @@ export default function Page() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-600"
               >
-                Host password
+                Host password (4 digits)
               </label>
               <input
+                required
                 type="password"
                 name="password"
                 id="password"
                 value={password}
                 onChange={handlePwChange}
                 className="block w-full mt-1 border border-gray-300 rounded-md py-1 px-2 shadow-sm"
+                autoComplete="new-password"
               />
             </div>
             <div className="col-span-2">
@@ -190,6 +171,7 @@ export default function Page() {
                 Meeting title
               </label>
               <input
+                required
                 type="text"
                 name="title"
                 id="title"
@@ -207,6 +189,7 @@ export default function Page() {
                 Meeting description
               </label>
               <textarea
+                required
                 id="description"
                 name="description"
                 placeholder="ex) This meeting is for only private"
@@ -223,13 +206,14 @@ export default function Page() {
                 Timezone
               </label>
               <select
+                required
                 name="timezone"
                 id="timezone"
                 className="block w-full mt-1 border border-gray-300 rounded-md py-1 px-2 shadow-sm"
                 value={timezone}
                 onChange={handleTimezone}
               >
-                {timezones.map(({ abbr, text }, index) => <option key={index} value={abbr}>{text}</option>)}
+                {timezones.map(({ value, text }, index) => <option key={index} value={value}>{text}</option>)}
               </select>
             </div>
             <div className="col-span-1">
@@ -240,6 +224,7 @@ export default function Page() {
                 Meeting duration
               </label>
               <select
+                required
                 name="duration"
                 id="duration"
                 className="block w-full mt-1 border border-gray-300 rounded-md py-1 px-2 shadow-sm"
