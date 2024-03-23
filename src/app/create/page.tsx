@@ -1,11 +1,11 @@
 "use client";
+import { Table } from "@/components/Timetable";
 import Timetable from "@/helper/timetable";
+import "@/styles/timetable.css";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import timezones from "timezones.json";
 import { useTableDragSelect } from "use-table-drag-select";
-import { Table } from "../../components/Timetable";
-import "../timetable.css";
 
 
 const durations = (() => {

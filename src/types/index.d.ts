@@ -5,9 +5,7 @@ export type Host = {
   preferred_time: string;
 }
 
-export type Guest = {
-
-}
+export type Guest = Host;
 
 export type Meeting = {
   id: integer;

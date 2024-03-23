@@ -1,57 +1,15 @@
 
 namespace Timetable {
 
-  export const createTable = () => {
-    return [
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false],
-    ];
+  export const createTable = <T = boolean>(init: () => T = (() => false) as any) => {
+    const table: T[][] = [];
+    for (let row = 0; row < 48; row++) {
+      table.push([]);
+      for (let col = 0; col < 7; col++) {
+        table[row].push(init());
+      }
+    }
+    return table;
   }
 
 

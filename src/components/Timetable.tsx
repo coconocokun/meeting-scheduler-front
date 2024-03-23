@@ -1,10 +1,44 @@
+import Timetable from "@/helper/timetable";
+import { Meeting } from "@/types";
 import { forwardRef } from "react";
+import ParticipantsView from "./participants-view";
+
+
+function parseMeetingRoom(meeting: Meeting) {
+  const table = Timetable.createTable<{ name: string, index: number }[]>(() => []);
+
+  const participants = [{
+    name: meeting.host.name,
+    preferred_time: Timetable.toArray(meeting.host.preferred_time),
+    index: 0
+  }];
+
+  for (let i = 0; i < meeting.guest.length; i++) {
+    const guest = meeting.guest[i];
+    participants.push({
+      name: guest.name,
+      preferred_time: Timetable.toArray(guest.preferred_time),
+      index: i + 1,
+    });
+  }
+
+  for (let row = 0; row < table.length; row++) {
+    for (let col = 0; col < table[row].length; col++) {
+      table[row][col] = participants.filter(p => p.preferred_time[row][col]);
+    }
+  }
+
+  return table;
+}
+
 
 interface Props {
   value: boolean[][];
+  meeting: Meeting;
 }
 
-export const Table = forwardRef<HTMLTableElement, Props>(({ value }, ref) => {
+export const Table = forwardRef<HTMLTableElement, Props>(({ value, meeting }, ref) => {
+  const meetingRoom = parseMeetingRoom(meeting);
   return (
     <table ref={ref} className="timetable">
       <thead>
@@ -30,7 +64,11 @@ export const Table = forwardRef<HTMLTableElement, Props>(({ value }, ref) => {
               </div>
             </th>
             {row.map((_, columnIndex) => (
-              <td key={columnIndex} className={value[rowIndex][columnIndex] ? "selected" : ""} />
+              <td key={columnIndex} className={value[rowIndex][columnIndex] ? "selected" : ""}>
+                {meetingRoom[rowIndex][columnIndex].length > 0 &&
+                  <ParticipantsView participants={meetingRoom[rowIndex][columnIndex]} />
+                }
+              </td>
             ))}
           </tr>
         ))}

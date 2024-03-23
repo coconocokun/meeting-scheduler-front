@@ -29,10 +29,10 @@
 
 .timetable th,
 .timetable td {
-  padding: 0 1.6rem;
-  height: 1.2rem;
+  padding: 0;
+  height: 1.6rem;
   text-align: left;
-  min-width: 30px;
+  width: 12.5%;
 }
 
 .timetable tbody th {
