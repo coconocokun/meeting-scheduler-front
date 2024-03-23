@@ -1,80 +1,51 @@
-"use client";
+import { ReactNode } from "react";
+import AnimatedParticipantsView from "./animated-participants-view";
 
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform
-} from "framer-motion";
-import { useState } from "react";
-
-type ParticipantsViewProps = {
+type ParticipantsProps = {
   participants: {
     name: string;
     index: number;
   }[];
 }
 
-export default function ParticipantsView({
-  participants
-}: ParticipantsViewProps) {
-  const [onHover, setHover] = useState(false);
-  const springConfig = { stiffness: 100, damping: 5 };
-  const x = useMotionValue(0); // going to set this value on mouse move
-  // rotate the tooltip
-  const rotate = useSpring(
-    useTransform(x, [-100, 100], [-45, 45]),
-    springConfig
-  );
-  // translate the tooltip
-  const translateX = useSpring(
-    useTransform(x, [-100, 100], [-50, 50]),
-    springConfig
-  );
-  const handleMouseMove = (event: any) => {
-    const halfWidth = event.target.offsetWidth / 2;
-    x.set(event.nativeEvent.offsetX - halfWidth); // set the x value, which is then used in transform and rotate
-  };
+export type ParticipantsViewProps = ParticipantsProps & { children?: ReactNode };
 
-  return (
-    <div className="w-full h-full relative isolate">
-      <div className="flex flex-wrap items-center justify-end inset-1 absolute group"
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        onMouseMove={handleMouseMove}>
-        <AnimatePresence mode="wait">
-          {onHover && (
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.6 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                transition: {
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 10,
-                },
-              }}
-              exit={{ opacity: 0, y: 20, scale: 0.6 }}
-              style={{
-                translateX: translateX,
-                rotate: rotate,
-                whiteSpace: "nowrap",
-              }}
-              className="absolute -top-16 -left-0 translate-x-1/2 flex text-xs flex-col items-center justify-center rounded-md bg-black z-50 shadow-xl px-4 py-2 text-white group-hover:opacity-100 opacity-0"
-            >
-              {participants[0].name}{participants.length > 1 ? ` + ${participants.length - 1} more` : ""}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        {participants.map((participant, i) => <span key={i} className="inline-block w-2 h-2 ring-white ring-2 bg-rose-600 rounded-full hue-rotate-[0deg]"
-          style={{
-            "--tw-hue-rotate":
-              `hue-rotate(${participant.index * 323}deg)`
-          } as any}></span>)}
-      </div>
-    </div>
-  )
+const StaticParticipantsView = ({
+  participants,
+  children
+}: ParticipantsViewProps) => (
+  <div className="w-full h-full flex flex-wrap items-center justify-end p-1 pointer-events-none relative"
+  >
+    {children}
+    <div className="transition-opacity opacity-0 group-hover:opacity-100 absolute left-1/2 -top-10 pointer-events-none bg-neutral-700/90 rounded-full px-3 py-2 shadow-lg border-neutral-600 text-white font-bold text-xs w-fit block whitespace-nowrap break-keep">{participants[0].name}{participants.length > 1 ? ` + ${participants.length - 1} more` : ""}</div>
+  </div>
+);
+
+const ParticipantsChip = ({
+  participants
+}: ParticipantsProps) => participants.map(
+  (participant, i) =>
+    <span key={i} className="inline-block w-2 h-2 ring-white ring-2 bg-rose-500 rounded-full hue-rotate-[0deg]"
+      style={{
+        "--tw-hue-rotate":
+          `hue-rotate(${participant.index * 107}deg)`
+      } as any}></span>
+);
+
+export default function ParticipantsView({
+  participants, animated
+}: ParticipantsProps & { animated: boolean }) {
+  if (animated) {
+    return (
+      <AnimatedParticipantsView participants={participants}>
+        <ParticipantsChip participants={participants} />
+      </AnimatedParticipantsView>
+    )
+  } else {
+    return (
+      <StaticParticipantsView participants={participants}>
+        <ParticipantsChip participants={participants} />
+      </StaticParticipantsView>
+    );
+  }
 }

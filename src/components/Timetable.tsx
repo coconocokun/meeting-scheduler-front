@@ -35,9 +35,10 @@ function parseMeetingRoom(meeting: Meeting) {
 interface Props {
   value: boolean[][];
   meeting: Meeting;
+  editMode?: boolean;
 }
 
-export const Table = forwardRef<HTMLTableElement, Props>(({ value, meeting }, ref) => {
+export const Table = forwardRef<HTMLTableElement, Props>(({ value, meeting, editMode }, ref) => {
   const meetingRoom = parseMeetingRoom(meeting);
   return (
     <table ref={ref} className="timetable">
@@ -55,18 +56,25 @@ export const Table = forwardRef<HTMLTableElement, Props>(({ value, meeting }, re
       </thead>
       <tbody>
         {value.map((row, rowIndex) => (
-          <tr key={rowIndex} className="group">
+          <tr key={rowIndex} className="group/row">
             <th>
-              <div className={rowIndex % 4 ? 'opacity-0 group-hover:opacity-100' : 'contents'}>
+              <div className={rowIndex % 4 ? 'opacity-0 group-hover/row:opacity-100' : 'contents'}>
                 <span>{rowIndex >> 1}</span>
                 :
                 <span>{((rowIndex % 2) * 30).toString().padStart(2, '0')}</span>
               </div>
             </th>
             {row.map((_, columnIndex) => (
-              <td key={columnIndex} className={value[rowIndex][columnIndex] ? "selected" : ""}>
+              <td
+                key={columnIndex}
+                className={value[rowIndex][columnIndex] ? "selected group" : "group"}
+                style={{
+                  "--num-participants": meetingRoom[rowIndex][columnIndex].length
+                } as any}>
                 {meetingRoom[rowIndex][columnIndex].length > 0 &&
-                  <ParticipantsView participants={meetingRoom[rowIndex][columnIndex]} />
+                  <ParticipantsView
+                    participants={meetingRoom[rowIndex][columnIndex]}
+                    animated={!editMode} />
                 }
               </td>
             ))}

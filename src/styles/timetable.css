@@ -33,6 +33,17 @@
   height: 1.6rem;
   text-align: left;
   width: 12.5%;
+  position: relative;
+}
+
+.timetable td::before {
+  content: ' ';
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  display: block;
+  background-color: #646cff;
+  opacity: calc(var(--num-participants, 0) / (var(--num-participants, 0) + 5));
 }
 
 .timetable tbody th {

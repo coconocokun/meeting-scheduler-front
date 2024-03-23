@@ -27,6 +27,19 @@ export default async function Page({ params }: { params: { id: string } }) {
             <dt className="after:content-[':']">Timezone</dt>
             <dd>{meeting.timezone}</dd>
           </dl>
+          <dl className="flex justify-center items-center gap-1 text-sm my-10">
+            <dt className="after:content-[':']">Participants</dt>
+            <dd>
+              <ul className="flex flex-wrap gap-1 items-center">
+                <li className="px-2 py-1 rounded-full bg-slate-600 text-white">{meeting.host.name}</li>
+                {meeting.guest.map((guest, idx) => <li
+                  key={idx}
+                  className="px-2 py-1 rounded-full bg-slate-600 text-white">
+                  {guest.name}
+                </li>)}
+              </ul>
+            </dd>
+          </dl>
           <Table value={Timetable.createTable()} meeting={meeting} />
           <Link href={`/${params.id}/join`} className="mx-auto block w-fit bg-indigo-600 text-white font-bold py-2 px-5 rounded-md hover:bg-indigo-900 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50">Submit my schedule</Link>
         </section>

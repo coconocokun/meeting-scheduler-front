@@ -14,8 +14,6 @@ import { Table } from "./Timetable";
 type SubmitScheduleFormProps = {
   className?: ClassValue;
   meeting: Meeting;
-  onSubmit?: Function;
-  onCancel?: Function;
 }
 
 
@@ -63,12 +61,8 @@ export default function SubmitScheduleForm(props: SubmitScheduleFormProps) {
       },
       body: JSON.stringify(dataToSend),
     });
-    const resJson = await res.json();
-    console.log(resJson);
-    if (props.onSubmit)
-      props.onSubmit();
-    else
-      router.refresh();
+    const resJson = (await res.json()) as { meetingId: `${number}` };
+    router.push(`/${resJson.meetingId}`);
   };
 
   const handleNameChange = (e: any) => {
@@ -111,7 +105,7 @@ export default function SubmitScheduleForm(props: SubmitScheduleFormProps) {
               >
                 Preferred time
               </label>
-              <Table ref={ref} value={tableValue} meeting={props.meeting} />
+              <Table ref={ref} value={tableValue} meeting={props.meeting} editMode />
             </div>
           </div>
           <footer className="flex justify-end mt-4 gap-5">
