@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/cn";
 import { ClassValue } from "clsx";
-import { MouseEventHandler, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { MouseEventHandler, ReactNode, useCallback, useEffect, useState } from "react";
 
 
 type State = "success" | "error" | "idle";
@@ -29,22 +29,19 @@ export default function ClipboardButton(
     }
   }, [state]);
 
-
-  const clipboardContent = useMemo(() => asAbsoluteURL ? `${location.protocol}//${location.host}${content}` : content, [content, asAbsoluteURL]);
-
   const onClick = useCallback(((e) => {
     e.preventDefault();
     e.stopPropagation();
     if (state !== "idle") return;
     try {
-      navigator.clipboard.writeText(clipboardContent);
+      navigator.clipboard.writeText(asAbsoluteURL ? `${window.location.protocol}//${location.host}${content}` : content);
       setState("success");
 
     } catch (error) {
       console.error(error);
       setState("error");
     }
-  }) satisfies MouseEventHandler<HTMLButtonElement>, [clipboardContent])
+  }) satisfies MouseEventHandler<HTMLButtonElement>, [asAbsoluteURL, content])
 
   return (
     <button className={cn(className, "relative")}

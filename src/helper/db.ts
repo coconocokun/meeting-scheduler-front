@@ -1,4 +1,4 @@
-import { createClient, Client } from "@libsql/client";
+import { Client, createClient } from "@libsql/client";
 
 export async function connectDB() {
   try {
@@ -120,7 +120,12 @@ export async function changeMeeting(
 
 export async function createPreferredTime(db: Client, meetingId: number, name: string, preferredTime: string) {
   try {
-    // 1. Insert guest data into guest table
+    // 1. Delete old data from guest table
+    await db.execute({
+      sql: `DELETE FROM guest WHERE name = ?`,
+      args: [name]
+    });
+    // 2. Insert guest data into guest table
     await db.execute({
       sql: "INSERT INTO guest (name, meeting_id, preferred_time) VALUES (?, ?, ?)",
       args: [name, meetingId, preferredTime],
