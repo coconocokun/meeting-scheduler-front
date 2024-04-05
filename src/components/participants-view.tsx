@@ -25,9 +25,9 @@ const ParticipantsChip = ({
   participants
 }: ParticipantsProps) => participants.map(
   (participant, i) =>
-    <span key={i} className="inline-block w-2 h-2 ring-white ring-2 bg-rose-500 rounded-full hue-rotate-[0deg]"
+    <span key={i} className="inline-block w-2 h-2 ring-white ring-2 bg-rose-500 rounded-full hue-rotate-[290deg]"
       style={{
-        "--tw-hue-rotate":
+        "--tw-hue-rotate_":
           `hue-rotate(${participant.index * 107}deg)`
       } as any}></span>
 );

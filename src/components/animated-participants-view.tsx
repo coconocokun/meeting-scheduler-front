@@ -34,11 +34,11 @@ export default function AnimatedParticipantsView({
 
   return (
     <div className="w-full h-full relative isolate">
-      <div className="flex flex-wrap items-center justify-end inset-1 absolute group"
+      <div className="flex flex-wrap items-center justify-center inset-1 absolute group"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onMouseMove={handleMouseMove}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           {onHover && (
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.6 }}

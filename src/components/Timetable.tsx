@@ -1,26 +1,28 @@
 import Timetable from "@/helper/timetable";
 import { Meeting } from "@/types";
+import { cn } from "@/utils/cn";
 import { forwardRef } from "react";
 import ParticipantsView from "./participants-view";
 
 
-function parseMeetingRoom(meeting: Meeting) {
+function parseMeetingRoom(meeting?: Meeting) {
   const table = Timetable.createTable<{ name: string, index: number }[]>(() => []);
 
-  const participants = [{
+  const participants = meeting ? [{
     name: meeting.host.name,
     preferred_time: Timetable.toArray(meeting.host.preferred_time),
     index: 0
-  }];
+  }] : [];
 
-  for (let i = 0; i < meeting.guest.length; i++) {
-    const guest = meeting.guest[i];
-    participants.push({
-      name: guest.name,
-      preferred_time: Timetable.toArray(guest.preferred_time),
-      index: i + 1,
-    });
-  }
+  if (meeting)
+    for (let i = 0; i < meeting.guest.length; i++) {
+      const guest = meeting.guest[i];
+      participants.push({
+        name: guest.name,
+        preferred_time: Timetable.toArray(guest.preferred_time),
+        index: i + 1,
+      });
+    }
 
   for (let row = 0; row < table.length; row++) {
     for (let col = 0; col < table[row].length; col++) {
@@ -34,7 +36,7 @@ function parseMeetingRoom(meeting: Meeting) {
 
 interface Props {
   value: boolean[][];
-  meeting: Meeting;
+  meeting?: Meeting;
   editMode?: boolean;
 }
 
@@ -67,7 +69,11 @@ export const Table = forwardRef<HTMLTableElement, Props>(({ value, meeting, edit
             {row.map((_, columnIndex) => (
               <td
                 key={columnIndex}
-                className={value[rowIndex][columnIndex] ? "selected group" : "group"}
+                className={cn(
+                  value[rowIndex][columnIndex] ? "selected group" : "group",
+                  meetingRoom[rowIndex][columnIndex].length === 1 + (meeting?.guest.length ?? 0)
+                  && "full !bg-rose-600"
+                )}
                 style={{
                   "--num-participants": meetingRoom[rowIndex][columnIndex].length
                 } as any}>

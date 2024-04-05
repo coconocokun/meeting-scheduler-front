@@ -5,6 +5,8 @@ import Timetable from "@/helper/timetable";
 import "@/styles/timetable.css";
 import Link from "next/link";
 
+export const fetchCache = "force-no-store";
+
 export default async function Page({ params }: { params: { id: string } }) {
   const meeting = await API.getMeeting(params.id);
   return (

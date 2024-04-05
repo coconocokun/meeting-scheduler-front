@@ -63,6 +63,7 @@ export default function SubmitScheduleForm(props: SubmitScheduleFormProps) {
     });
     const resJson = (await res.json()) as { meetingId: `${number}` };
     router.push(`/${resJson.meetingId}`);
+    router.refresh();
   };
 
   const handleNameChange = (e: any) => {

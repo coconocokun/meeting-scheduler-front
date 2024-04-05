@@ -161,7 +161,8 @@ export default function Home() {
             <p className="text-base md:text-lg mt-4 text-white font-normal inter-var text-center">
               Leverage the power of canvas to create a beautiful hero section
             </p>
-            <a className="block bg-indigo-600 text-white hover:bg-indigo-500 px-3 py-2 rounded mt-16">Create a new meeting schedule</a>
+            <a className="block bg-indigo-600 text-white hover:bg-indigo-500 px-3 py-2 rounded mt-16"
+            href="/create">Create a new meeting schedule</a>
           </div>
         </WavyBackground>
       </section>
