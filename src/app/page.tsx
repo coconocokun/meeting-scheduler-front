@@ -1,14 +1,15 @@
 import FloatingImageSection from "@/components/float-image-section";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { MaskContainer } from "@/components/ui/svg-mask-effect";
 import { WavyBackground } from "@/components/ui/wavy-background";
-
+import "@/styles/home.css";
 
 
 export default function Home() {
   return (
     <>
-      <header className="relative w-full bg-black flex flex-col items-center justify-center overflow-hidden">
+      <AuroraBackground className="relative w-full bg-black flex flex-col items-center justify-center overflow-hidden snap-end min-h-screen">
         <div className="flex flex-col items-center justify-center py-64">
           <div></div>
           <div className="relative">
@@ -20,16 +21,16 @@ export default function Home() {
             <div className="absolute left-1/2 ml-[-12.5%] bottom-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
             <div className="absolute left-1/2 ml-[-12.5%] bottom-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
           </div>
-          <div className="relative h-64 w-full">
+          <div className="relative h-64 w-full mix-blend-color-dodge">
             <div className="from-black to-transparent bg-gradient-to-t absolute inset-0"></div>
             <div className="from-black via-transparent to-black bg-gradient-to-r absolute inset-0"></div>
             <SparklesCore
-              background="transparent"
+              background="#000000"
               minSize={0.4}
-              maxSize={1}
+              maxSize={1.4}
               particleDensity={800}
               className="w-full h-full"
-              particleColor="#FFFFFF"
+              particleColor="#FFFFAA"
             />
           </div>
           <div className="grid grid-cols-2 gap-16 text-center max-w-xl mx-auto relative z-20">
@@ -38,7 +39,7 @@ export default function Home() {
               href="/create">New meeting</a>
           </div>
         </div>
-      </header>
+      </AuroraBackground>
       <FloatingImageSection />
       <MaskContainer
         revealText={
@@ -52,7 +53,7 @@ export default function Home() {
             </p>
           </div>
         }
-        className="h-[60rem]"
+        className="min-h-screen h-[60rem] snap-always snap-center"
         revealSize={900}
       >
         <h2 className="text-5xl md:text-7xl xl:text-7xl mb-20 font-bold">Find out who made this</h2>
@@ -79,7 +80,7 @@ export default function Home() {
           </div>
         </div>
       </MaskContainer>
-      <section className="relative">
+      <section className="relative min-h-screen snap-always snap-center">
         <WavyBackground className="max-w-4xl mx-auto pb-40">
           <div className="flex flex-col items-center">
             <p className="text-2xl md:text-4xl lg:text-7xl text-white font-bold inter-var text-center mt-32">
