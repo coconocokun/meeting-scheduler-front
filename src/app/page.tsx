@@ -1,11 +1,7 @@
-import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import FloatingImageSection from "@/components/float-image-section";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { MaskContainer } from "@/components/ui/svg-mask-effect";
 import { WavyBackground } from "@/components/ui/wavy-background";
-import Image from "next/image";
-import Screenshot1 from "./../../public/images/create-a-meeting-schedule.png";
-import Screenshot2 from "./../../public/images/screenshot2.png";
-import Screenshot3 from "./../../public/images/screenshot3.png";
 
 
 
@@ -43,64 +39,7 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <div id="learnMore">
-        <div className="md:relative">
-          <div className="container mx-auto lg:max-w-screen-lg md:min-h-72 lg:min-h-96 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-5 md:gap-4 lg:gap-8 py-5 md:py-8 lg:py-10 items-stretch md:absolute md:inset-0">
-            <div></div>
-            <div className="flex flex-col justify-center">
-              <h2 className="text-lg md:text-5xl lg:text-7xl mb-3 md:mb-5 lg:mb-8 font-bold">Create a meeting schedule</h2>
-              <p className="md:text-lg lg:text-xl !leading-loose">Work together in real time with your team, clients, and stakeholders. Collaborate on documents, share ideas, and make decisions quickly. With our platform, you can streamline your workflow and increase productivity.</p>
-            </div>
-          </div>
-          <CardContainer className="container mx-auto lg:max-w-screen-lg md:min-h-72 lg:min-h-96 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-5 md:gap-4 lg:gap-8 py-5 md:py-8 lg:py-10 items-stretch">
-            <CardBody className="h-full w-full shadow-md rounded bg-slate-50">
-              <CardItem translateZ="50">
-                <Image
-                  src={Screenshot1}
-                  width={800}
-                  height={800}
-                  className="w-full object-cover aspect-1 rounded"
-                  alt="linear board demo"
-                />
-              </CardItem>
-            </CardBody>
-          </CardContainer>
-        </div>
-        <CardContainer className="container mx-auto lg:max-w-screen-lg md:min-h-72 lg:min-h-96 grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-5 md:gap-4 lg:gap-8 py-5 md:py-8 lg:py-10 items-stretch">
-          <div className="flex flex-col justify-center">
-            <h2 className="text-lg md:text-5xl lg:text-7xl mb-3 md:mb-5 lg:mb-8 font-bold">Invite guests</h2>
-            <p className="md:text-lg lg:text-xl !leading-loose">See changes as they happen. With our platform, you can track every modification in real time. No more confusion about the latest version of your project. Say goodbye to the chaos of version control and embrace the simplicity of real-time updates.</p>
-          </div>
-          <CardBody>
-            <CardItem translateZ="50">
-              <Image
-                src={Screenshot2}
-                width={800}
-                height={800}
-                className="w-full object-cover aspect-1"
-                alt="linear board demo"
-              />
-            </CardItem>
-          </CardBody>
-        </CardContainer>
-        <CardContainer className="container mx-auto lg:max-w-screen-lg md:min-h-72 lg:min-h-96 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-5 md:gap-4 lg:gap-8 py-5 md:py-8 lg:py-10 items-stretch">
-          <CardBody>
-            <CardItem translateZ="50">
-              <Image
-                src={Screenshot3}
-                width={800}
-                height={800}
-                className="w-full object-cover aspect-1"
-                alt="linear board demo"
-              />
-            </CardItem>
-          </CardBody>
-          <div className="flex flex-col justify-center">
-            <h2 className="text-lg md:text-5xl lg:text-7xl mb-3 md:mb-5 lg:mb-8 font-bold">Set the final meeting time</h2>
-            <p className="md:text-lg lg:text-xl !leading-loose">Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.</p>
-          </div>
-        </CardContainer>
-      </div>
+      <FloatingImageSection />
       <MaskContainer
         revealText={
           <div className="space-y-10">
