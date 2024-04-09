@@ -78,7 +78,7 @@ export default function Home() {
           <div className="px-32 space-y-20 border-l">
             <dl>
               <dt className="text-xl font-normal">Student</dt>
-              <dd>Jane Han</dd>
+              <dd>Anonymous</dd>
             </dl>
             <dl>
               <dt className="text-xl font-normal">Student</dt>
